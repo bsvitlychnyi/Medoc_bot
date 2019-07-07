@@ -38,7 +38,7 @@ def get_help(message: Message):
 def start_service_0(message: Message):
     try:
         if message.from_user.id in cons.users:
-            if 1 in cons.backup_status.values():  # Проверка, делается ли сейчас бекап. в функции get_verification при подтверждении бекапа пользователю присвается "стату" - 1
+            if 1 in cons.backup_status.values():  # Проверка, делается ли сейчас бекап
                 raise Exception()
             key = types.ReplyKeyboardMarkup()
             key.row("Да","Нет")
@@ -74,7 +74,7 @@ def start_service(message: Message):
 def stop_service_0(message: Message):
     try:
         if message.from_user.id in cons.users:
-            if 1 in cons.backup_status.values():  # Проверка, делается ли сейчас бекап. в функции get_verification при подтверждении бекапа пользователю присвается "стату" - 1
+            if 1 in cons.backup_status.values():  # Проверка, делается ли сейчас бекап
                 raise Exception()
             key = types.ReplyKeyboardMarkup()
             key.row("Да","Нет")
@@ -163,7 +163,7 @@ def get_backup(message):
 
     try:
         if message.from_user.id in cons.users:
-            if 1 in cons.backup_status.values():  # Проверка, делается ли сейчас бекап. в функции get_verification при подтверждении бекапа пользователю присвается "стату" - 1
+            if 1 in cons.backup_status.values():  # Проверка, делается ли сейчас бекап
                 raise Exception()
             msg = bot.send_message(message.from_user.id, text='Вы подтверждаете, что хотите сделать backup?')
             bot.register_next_step_handler(msg, get_verification)
@@ -174,8 +174,7 @@ def get_backup(message):
 
 
 def get_verification(message):
-    """ Функция проверяет подтверждение на старт бекапа
-     еще проверяет не делает ли сейчас кто-то бекап """
+    """ Функция проверяет подтверждение на старт бекапа"""
 
     try:
         uns = message.text
@@ -199,7 +198,7 @@ def get_backup_old(message):
 
     try:
         if message.from_user.id in cons.users:
-            if 1 in cons.backup_status.values():  # Проверка, делается ли сейчас бекап. в функции get_verification при подтверждении бекапа пользователю присвается "стату" - 1
+            if 1 in cons.backup_status.values():  # Проверка, делается ли сейчас бекап
                 raise Exception()
             msg = bot.send_message(message.from_user.id, text='Вы подтверждаете, что хотите сделать backup?')
             bot.register_next_step_handler(msg, get_verification_old)
@@ -234,7 +233,7 @@ def get_dell(message):
 
     try:
         if message.from_user.id in cons.users:
-            if 1 in cons.backup_status.values():  # Проверка, делается ли сейчас бекап. в функции get_verification при подтверждении бекапа пользователю присвается "стату" - 1
+            if 1 in cons.backup_status.values():  # Проверка, делается ли сейчас бекап
                 raise Exception()
             key = types.ReplyKeyboardMarkup()
             markup = os.listdir(cons.target_dir)
