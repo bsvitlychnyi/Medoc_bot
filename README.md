@@ -1,2 +1,2 @@
-# Medoc_bot
- 
+pip install requests
+pip install pytelegrambotapi
