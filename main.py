@@ -39,7 +39,8 @@ def start_service_0(message: Message):
     try:
         if message.from_user.id in cons.users:
             if 1 in cons.backup_status.values():  # Проверка, делается ли сейчас бекап
-                raise Exception()
+                bot.send_message(message.from_user.id, text=f'Сейчас уже создаётся резервная копия, подождите')
+                return
             key = types.ReplyKeyboardMarkup()
             key.row("Да","Нет")
             key.one_time_keyboard = True
@@ -49,7 +50,7 @@ def start_service_0(message: Message):
         else:
             bot.send_message(message.from_user.id, text=cons.get_ansver())
     except Exception as e:
-        bot.send_message(message.from_user.id, text=f'Сейчас делается бекапчик, подождите,\n\nError: {e}')
+        bot.send_message(message.from_user.id, text=f'Error\n{e}')
 
 
 def start_service(message: Message):
@@ -75,7 +76,8 @@ def stop_service_0(message: Message):
     try:
         if message.from_user.id in cons.users:
             if 1 in cons.backup_status.values():  # Проверка, делается ли сейчас бекап
-                raise Exception()
+                bot.send_message(message.from_user.id, text=f'Сейчас уже создаётся резервная копия, подождите')
+                return
             key = types.ReplyKeyboardMarkup()
             key.row("Да","Нет")
             key.one_time_keyboard = True
@@ -85,7 +87,7 @@ def stop_service_0(message: Message):
         else:
             bot.send_message(message.from_user.id, text=cons.get_ansver())
     except Exception as e:
-        bot.send_message(message.from_user.id, text=f'Сейчас делается бекапчик, подождите')
+        bot.send_message(message.from_user.id, text=f'Error\n{e}')
 
 
 def stop_service(message: Message):
@@ -147,7 +149,7 @@ def write_last_link(message):
     sep = os.sep
     with open(f"***", 'w') as file_handler:
         file_handler.write(link[0])
-    bot.send_message(message.from_user.id, text='Ладно, замолкаю')
+    bot.send_message(message.from_user.id, text='Оповещения отключены до следующего обновления')
 
 
 @bot.message_handler(commands=['zero'])
@@ -164,13 +166,14 @@ def get_backup(message):
     try:
         if message.from_user.id in cons.users:
             if 1 in cons.backup_status.values():  # Проверка, делается ли сейчас бекап
-                raise Exception()
+                bot.send_message(message.from_user.id, text=f'Сейчас уже создаётся резервная копия, подождите')
+                return
             msg = bot.send_message(message.from_user.id, text='Вы подтверждаете, что хотите сделать backup?')
             bot.register_next_step_handler(msg, get_verification)
         else:
             bot.send_message(message.from_user.id, text=cons.get_ansver())
-    except Exception:
-        bot.send_message(message.from_user.id, text='Сейчас уже делается бекапчик')
+    except Exception as e:
+        bot.send_message(message.from_user.id, text='Error\n{e}')
 
 
 def get_verification(message):
@@ -199,13 +202,14 @@ def get_backup_old(message):
     try:
         if message.from_user.id in cons.users:
             if 1 in cons.backup_status.values():  # Проверка, делается ли сейчас бекап
-                raise Exception()
+                bot.send_message(message.from_user.id, text=f'Сейчас уже создаётся резервная копия, подождите')
+                return
             msg = bot.send_message(message.from_user.id, text='Вы подтверждаете, что хотите сделать backup?')
             bot.register_next_step_handler(msg, get_verification_old)
         else:
             bot.send_message(message.from_user.id, text=cons.get_ansver())
-    except Exception:
-        bot.send_message(message.from_user.id, text='Сейчас уже делается бекапчик')
+    except Exception as e:
+        bot.send_message(message.from_user.id, text='Error\n{e}')
 
 
 def get_verification_old(message):
@@ -234,7 +238,8 @@ def get_dell(message):
     try:
         if message.from_user.id in cons.users:
             if 1 in cons.backup_status.values():  # Проверка, делается ли сейчас бекап
-                raise Exception()
+                bot.send_message(message.from_user.id, text=f'Сейчас уже создаётся резервная копия, подождите')
+                return
             key = types.ReplyKeyboardMarkup()
             markup = os.listdir(cons.target_dir)
             for i in markup:
@@ -247,7 +252,7 @@ def get_dell(message):
         else:
             bot.send_message(message.from_user.id, text=cons.get_ansver())
     except Exception as e:
-        bot.send_message(message.from_user.id, text=f'Сейчас делается бекапчик, подождите,\n\nError: {e}')
+        bot.send_message(message.from_user.id, text=f'Error: \n{e}')
 
 
 def get_dell_fin(message):
@@ -287,7 +292,7 @@ def do_backup(message):
     
         bot.send_message(message.from_user.id, text='Начинаем копировать базы, это займет некоторое время. По окончании пришлю сообщение')
         if shutil.copy(cons.iskra_dir, one) == one+r'\ZVIT.FDB':
-            bot.send_message(message.from_user.id, text=f"Резервная копия 1 успешно создана.\nПереходим к комбинату питания")
+            bot.send_message(message.from_user.id, text=f"Резервная копия 1 успешно создана.\nПереходим к 2")
         if shutil.copy(cons.kp_dir, two) == two+r'\ZVIT.FDB':
             bot.send_message(message.from_user.id, text=f"Резервная копия 2 успешно создана.\nОтличная работа 👍, хорошего дня 😊")
         cons.backup_status[message.from_user.id] = 0
@@ -316,9 +321,9 @@ def do_backup_old(message):
     
         bot.send_message(message.from_user.id, text='Начинаем копировать базы, это займет некоторое время. По окончании пришлю сообщение')
         if shutil.copy(cons.iskra_dir, one) == one+r'\ZVIT.FDB':
-            bot.send_message(message.from_user.id, text=f"Резервная копия искры успешно создана.\nПереходим к комбинату питания")
+            bot.send_message(message.from_user.id, text=f"Резервная копия 1 успешно создана.\nПереходим к 2")
         if shutil.copy(cons.kp_dir, two) == two+r'\ZVIT.FDB':
-            bot.send_message(message.from_user.id, text=f"Резервная копия кобината питания успешно создана.\nОтличная работа 👍, хорошего дня 😊")
+            bot.send_message(message.from_user.id, text=f"Резервная копия 2 успешно создана.\nОтличная работа 👍, хорошего дня 😊")
         cons.backup_status[message.from_user.id] = 0
         os.system('net start ZvitGrp')
     except Exception as e:
@@ -368,7 +373,7 @@ def period_check_update():
         last_link = get_last_link()  # получаем версию установленной программы
         updete = go_poparsim()
         if last_link != updete[0]:
-            bot.send_message(cons.admin, f'WARNING-WARNING-WARNING\n\nПоявилась обнова - {updete[2]}\n\n{updete[0]}\n\nШоб я не пиликал нужно выполнить /here')
+            bot.send_message(cons.admin, f'WARNING-WARNING-WARNING\n\nПоявилась обнова - {updete[2]}\n\n{updete[0]}\n\nДля отключения оповещений про это обновление необходимо нажать /here')
         time.sleep(3600)  # 1 час
 
 
@@ -380,7 +385,7 @@ def start1():
         try:
             period_check_update()
         except Exception as e:
-            bot.send_message(cons.admin, text=f'Поток с функцией period_check_updare чет упал\nError: {e}\nща перезапустим')
+            bot.send_message(cons.admin, text=f'Поток с функцией period_check_updare чет упал\nError: {e}\nсейчас перезапустим')
             time.sleep(60)
 
 
